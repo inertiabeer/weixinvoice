@@ -1,5 +1,5 @@
 var express = require('express');
-var confirm=require('./confirm.js');
+var confirm=require('../util/confirm.js');
 var router = express.Router();
 var xml2js=require('xml2js');//微信推送消息是用的xml格式
 router.get('/', function (req, res, next) {
@@ -19,7 +19,7 @@ router.get('/', function (req, res, next) {
 router.post('/',function(req,res,next){
     //这是对推送消息进行处理。
     var parser=new xml2js.Parser();
-    console.log(req);
+    console.log(req.body);
     // if(message.MsgType==="text")
     // {
     //     var content=message.Content;
