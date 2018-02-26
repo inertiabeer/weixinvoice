@@ -20,6 +20,7 @@ router.post('/',function(req,res,next){
     //这是对推送消息进行处理。
     var parser=new xml2js.Parser();
     console.log(req.body);
+    console.log(req.rawBody);
     // if(message.MsgType==="text")
     // {
     //     var content=message.Content;
