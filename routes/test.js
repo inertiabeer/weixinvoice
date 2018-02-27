@@ -7,8 +7,11 @@ var xml2js=require('xml2js');
 var confirm = require('../util/confirm.js');
 var get_access_token = require('../util/wx_request').get_access_token; //promise
 var get_user_info = require('../util/user_info').get_user_info;
+var robot=require('../util/robot');
 var router = express.Router();
-var builder=new xml2js.Builder();
+var builder = new xml2js.Builder({
+    rootName:''
+});
 
 
 var access_token, expires_in;
@@ -71,14 +74,7 @@ router.post('/', function (req, res, next) {
     var parser = new xml2js.Parser();
     var message = req.body.xml;//这里全部变成小写了
     let openid = message.fromusername[0];
-        //需要认证之后才可以用这个接口
-    // get_user_info(access_token, openid)
-    //     .then(function (body) {
-    //         console.log(body);
-    //     }, function (err) {
-    //         console.error(err);
-
-    //     });
+    //需要认证之后才可以用这个接口
     let msg={
         ToUserName:'',
         FromUserName:'',
@@ -94,15 +90,23 @@ router.post('/', function (req, res, next) {
     }
     if(message.msgtype=='text')
     {
-        [msg.ToUserName,msg.FromUserName]=[message.fromusername,message.tousername];
-        msg.CreateTime=new Date().getTime();
-        msg.Content=message.content;
-        msg.MsgType='text';
+
+        
+        robot(message.content,message.fromusername)
+        .then(function(text){
+            [msg.ToUserName, msg.FromUserName] = [message.fromusername, message.tousername];
+            msg.CreateTime = new Date().getTime();
+            msg.Content = text;//这里需要一个机器人
+            msg.MsgType = 'text';
+        }).catch(function(error){
+            console.log(error);
+        })
        
 
         
     }
     var xml=builder.buildObject(msg);
+    console.log(xml);
     res.send(xml);
 })
 
