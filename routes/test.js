@@ -69,7 +69,7 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next) {
     //这是对推送消息进行处理。
     var parser = new xml2js.Parser();
-    var message = req.body.xml;
+    var message = req.body.xml;//这里全部变成小写了
     let openid = message.fromusername[0];
         //需要认证之后才可以用这个接口
     // get_user_info(access_token, openid)
@@ -79,6 +79,14 @@ router.post('/', function (req, res, next) {
     //         console.error(err);
 
     //     });
+    let msg={
+        ToUserName:'',
+        FromUserName:'',
+        CreateTime:'',
+        MsgType:'',
+        Content:''
+
+    }
     if (message.msgtype == 'voice') {
         var mediaid = message.mediaid; //amr格式\
         get_voice(mediaid);
@@ -86,13 +94,15 @@ router.post('/', function (req, res, next) {
     }
     if(message.msgtype=='text')
     {
-        let m=message;//只是一个指针变量
-        [m.tousername,m.fromusername]=[m.fromusername,m.tousername];
-        m.createtime=new Date().getTime;
+        [msg.ToUserName,msg.FromUserName]=[message.fromusername,message.tousername];
+        msg.CreateTime=new Date().getTime();
+        msg.Content=message.content;
+        msg.MsgType='text';
+       
 
         
     }
-    var xml=builder.buildObject(message);
+    var xml=builder.buildObject(msg);
     res.send(xml);
 })
 
