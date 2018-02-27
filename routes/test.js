@@ -98,16 +98,18 @@ router.post('/', function (req, res, next) {
             msg.CreateTime = new Date().getTime();
             msg.Content = text;//这里需要一个机器人
             msg.MsgType = 'text';
-        }).catch(function(error){
+            var xml = builder.buildObject(msg);
+            console.log(xml);
+            res.send(xml);
+        })
+        .catch(function(error){
             console.log(error);
         })
        
 
         
     }
-    var xml=builder.buildObject(msg);
-    console.log(xml);
-    res.send(xml);
+
 })
 
 module.exports = router;
