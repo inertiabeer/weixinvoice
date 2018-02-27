@@ -74,7 +74,6 @@ router.post('/', function (req, res, next) {
     var parser = new xml2js.Parser();
     var message = req.body.xml;//这里全部变成小写了
     let openid = message.fromusername[0];
-    //需要认证之后才可以用这个接口
     let msg={
         ToUserName:'',
         FromUserName:'',
@@ -90,13 +89,11 @@ router.post('/', function (req, res, next) {
     }
     if(message.msgtype=='text')
     {
-
-        
-        robot(message.content,message.fromusername)
+        robot(message.content,openid)
         .then(function(text){
             [msg.ToUserName, msg.FromUserName] = [message.fromusername, message.tousername];
             msg.CreateTime = new Date().getTime();
-            msg.Content = text;//这里需要一个机器人
+            msg.Content = text.text;//这里需要一个机器人
             msg.MsgType = 'text';
             var xml = builder.buildObject(msg);
             console.log(xml);
