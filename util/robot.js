@@ -1,8 +1,8 @@
 var http = require('http');
 let config = {
-    url: "http://www.tuling123.com/openapi/api",
-    appkey: "bcc8fb1c07f249958696116df73f0156"
-}
+    url: 'http://www.tuling123.com/openapi/api',
+    appkey: 'bcc8fb1c07f249958696116df73f0156'
+};
 
 function robot(content,id) {
     return new Promise(function (resolve, reject) {
@@ -42,7 +42,7 @@ function robot(content,id) {
         req.write(postData);
         req.end();
 
-    })
+    });
 
 }
 

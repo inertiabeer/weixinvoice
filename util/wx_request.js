@@ -14,13 +14,12 @@ function get_access_token() {
 function get_token(resolve, reject) {
     var req = https.request(options, (res) => {
         res.setEncoding('utf8');
-        console.log('STATUS:' + res.statusCode);
         res.on('data', function (chunk) {
             resolve(chunk);
             
-        })
+        });
 
-    })
+    });
     req.on('error', (e) => {
         reject(e.message);
     });
@@ -28,4 +27,4 @@ function get_token(resolve, reject) {
 }
 module.exports={
     get_access_token:get_access_token
-}
+};
