@@ -9,9 +9,9 @@ var options = {
 
 function get_voice(access_token, message) {
     return new Promise(function(resolve,reject){
-        let media_id = message.media_id;
+        let mediaid = message.mediaid;
         let openid = message.openid;
-        options.path = '/cgi-bin/media/get?&access_token=' + access_token + '&media_id=' + media_id;
+        options.path = '/cgi-bin/media/get?&access_token=' + access_token + '&media_id=' + mediaid;
         var voice_url = 'http://' + options.hostname + options.path;
         //陷入回调地狱
         request
@@ -19,7 +19,7 @@ function get_voice(access_token, message) {
             .on('error', function (err) {
                 reject(err);
             })
-            .pipe(fs.createWriteStream('./voice/' + media_id + '.amr', {
+            .pipe(fs.createWriteStream('./voice/' + mediaid + '.amr', {
                 flags: 'w',
                 encoding: 'utf8',
                 fd: null,
@@ -27,7 +27,7 @@ function get_voice(access_token, message) {
                 autoClose: true
             })
                 .on('close', function () {
-                    recognize(media_id)
+                    recognize(mediaid)
                         .then(function (result) {
                             result.result[0]; //这是第一句话
                             robot(message.content, openid).then(function(text){
